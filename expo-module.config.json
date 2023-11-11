@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoAndroidWebviewSettingCheckerModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.androidwebviewsettingchecker.ExpoAndroidWebviewSettingCheckerModule"]
+  }
+}
