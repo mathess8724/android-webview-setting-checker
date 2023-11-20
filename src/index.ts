@@ -1,26 +1,25 @@
-import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
+import React from "react";
+import {
+  NativeModulesProxy,
+  EventEmitter,
+  Subscription,
+} from "expo-modules-core";
+//import AndroidSystemWebViewCheckerProvider from './ExpoAndroidWebviewSettingCheckerProvider'
+import ExpoAndroidWebviewSettingCheckerModule from "./ExpoAndroidWebviewSettingCheckerModule";
+//import { ChangeEventPayload, ExpoAndroidWebviewSettingCheckerViewProps } from './ExpoAndroidWebviewSettingChecker.types';
+import AndroidSystemWebViewChecker from "./ExpoAndroidWebviewSettingCheckerProvider";
 
-// Import the native module. On web, it will be resolved to ExpoAndroidWebviewSettingChecker.web.ts
-// and on native platforms to ExpoAndroidWebviewSettingChecker.ts
-import ExpoAndroidWebviewSettingCheckerModule from './ExpoAndroidWebviewSettingCheckerModule';
-import ExpoAndroidWebviewSettingCheckerView from './ExpoAndroidWebviewSettingCheckerView';
-import { ChangeEventPayload, ExpoAndroidWebviewSettingCheckerViewProps } from './ExpoAndroidWebviewSettingChecker.types';
-
-// Get the native constant value.
-export const PI = ExpoAndroidWebviewSettingCheckerModule.PI;
-
-export function hello(): string {
-  return ExpoAndroidWebviewSettingCheckerModule.hello();
+export async function webViewEnabled(): Promise<boolean> {
+  return await ExpoAndroidWebviewSettingCheckerModule.webViewEnabled();
 }
 
-export async function setValueAsync(value: string) {
-  return await ExpoAndroidWebviewSettingCheckerModule.setValueAsync(value);
+export function goToSettings() {
+  return ExpoAndroidWebviewSettingCheckerModule.goToSettings();
 }
 
-const emitter = new EventEmitter(ExpoAndroidWebviewSettingCheckerModule ?? NativeModulesProxy.ExpoAndroidWebviewSettingChecker);
+// export function AndroidSystemWebViewCheckerProvider(children: any) {
+//   return WebviewCheckerProvider.AndroidSystemWebViewCheckerProvider(children);
+// }
+export { AndroidSystemWebViewChecker }
 
-export function addChangeListener(listener: (event: ChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ChangeEventPayload>('onChange', listener);
-}
-
-export { ExpoAndroidWebviewSettingCheckerView, ExpoAndroidWebviewSettingCheckerViewProps, ChangeEventPayload };
+//export { };

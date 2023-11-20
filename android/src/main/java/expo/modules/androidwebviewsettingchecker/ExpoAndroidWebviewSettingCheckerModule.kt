@@ -1,46 +1,48 @@
 package expo.modules.androidwebviewsettingchecker
 
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.webkit.WebView
+import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-
+import android.provider.Settings
 class ExpoAndroidWebviewSettingCheckerModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
+  private val context
+    get() = requireNotNull(appContext.reactContext)
   override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoAndroidWebviewSettingChecker')` in JavaScript.
+
     Name("ExpoAndroidWebviewSettingChecker")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
+    // Function to go directly to settings page
+    Function("goToSettings") {
+      try {
+        //intent.data = Uri.parse("package:com.google.android.webview")
+        val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        true // Indicate success
+      } catch (e: Exception) {
+        Log.e("WebViewSettings", "Error opening WebView settings", e)
+        false
+      }
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoAndroidWebviewSettingCheckerView::class) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoAndroidWebviewSettingCheckerView, prop: String ->
-        println(prop)
+    // Function to test if webView is enabled
+    AsyncFunction("webViewEnabled") { promise: Promise ->
+      val handler = Handler(Looper.getMainLooper())
+      handler.post {
+        try {
+          val wv = WebView(context)
+          Log.i("WebView", "webView okay!")
+          wv.destroy()
+          promise.resolve(true) //resolve the promise as true
+        } catch (e: Exception) {
+          Log.e("webView", "webView error!")
+          promise.resolve(false) //resolve the promise as false, to always return a boolean
+        }
       }
     }
   }
