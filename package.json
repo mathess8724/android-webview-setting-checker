@@ -1,6 +1,6 @@
 {
   "name": "expo-android-webview-setting-checker",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "to check if android setting is enabled or not",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -24,13 +24,13 @@
     "Android WebView",
     "Expo WebView"
   ],
-  "repository": "https://",
+  "repository": "https://github.com/mathess8724/android-webview-setting-checker#readme",
   "bugs": {
-    "url": "https://github.com"
+    "url": "https://github.com/mathess8724/android-webview-setting-checker/issues"
   },
   "author": "mathieu m  (mathess8724)",
   "license": "MIT",
-  "homepage": "https://github.com/#readme",
+  "homepage": "https://github.com/mathess8724/android-webview-setting-checker#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/react": "^18.0.25",
